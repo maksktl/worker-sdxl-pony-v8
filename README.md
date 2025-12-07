@@ -1,40 +1,133 @@
 <div align="center">
 
-<h1>Pony Diffusion XL | Worker</h1>
+<h1>Anime/Hentai NSFW Worker</h1>
 
-🚀 | RunPod implementation of SDXL for serverless deployment.  
-Forked and modified for to use Pony diffusion
+🚀 | RunPod Serverless worker for high-quality anime/hentai image generation.  
+Based on NTR Mix Illustrious XL v4.0 model.
 </div>
 
-## Differences from orginal repo
+## Features
 
-- Change the model to be used from Stable Diffusion XL to Pony Diffusion V8
-- Remove the refiner code as Pony Diffusion does not use it
-- Remove the use of a seperate VAE as Pony Diffusion does not require it
+- **NTR Mix Illustrious XL v4.0** - High-quality anime/hentai model
+- **SDXL VAE** - Prevents washed-out colors
+- **Optimized settings** - Euler a scheduler, CFG 5.5, quality tags
+- **Illustrious-based** - Best for anime art style
 
-## 📖 | Getting Started
+---
 
-1. Clone this repository.
-2. (Optional) Add DockerHub credentials to GitHub Secrets.
-3. Add your code to the `src` directory.
-4. Update the `handler.py` file to load models and process requests.
-5. Add any dependencies to the `requirements.txt` file.
-6. Add any other build time scripts to the`builder` directory, for example, downloading models.
-7. Update the `Dockerfile` to include any additional dependencies.
+## 📥 Required Model Files
 
-### CI/CD
+**Before building the Docker image, you must download and place these files in the `models/` directory:**
 
-This repository is setup to automatically build and push a docker image to the GitHub Container Registry. You will need to add the following to the GitHub Secrets for this repository to enable this functionality:
+### 1. Checkpoint Model (models/checkpoints/)
 
-- `DOCKERHUB_USERNAME` | Your DockerHub username for logging in.
-- `DOCKERHUB_TOKEN` | Your DockerHub token for logging in.
-- `DOCKERHUB_REPO` | The name of the repository you want to push to.
-- `DOCKERHUB_IMG` | The name of the image you want to push to.
+| File | Source | Size |
+|------|--------|------|
+| `ntrMIXIllustriousXL_v40.safetensors` | [CivitAI](https://civitai.com/models/926443?modelVersionId=1061268) | ~6.5 GB |
 
-The `CD-docker_dev.yml` file will build the image and push it to the `dev` tag, while the `CD-docker_release.yml` file will build the image on releases and tag it with the release version.
+### 2. VAE (models/vae/)
 
-The `CI-test_worker.yml` file will test the worker using the input provided by the `--test_input` argument when calling the file containing your handler. Be sure to update this workflow to install any dependencies you need to run your tests.
+| File | Source | Size |
+|------|--------|------|
+| `sdxl_vae.safetensors` | [HuggingFace](https://huggingface.co/stabilityai/sdxl-vae/blob/main/sdxl_vae.safetensors) | ~335 MB |
 
-## 🔗 | Links
+---
 
-🐳 [Docker Container](https://hub.docker.com/r/runpod/ai-api-sdxl)
+## 📁 Final Directory Structure
+
+```
+models/
+├── checkpoints/
+│   └── ntrMIXIllustriousXL_v40.safetensors
+└── vae/
+    └── sdxl_vae.safetensors
+```
+
+---
+
+## 🚀 Building & Deploying
+
+```bash
+# Build Docker image
+docker build -t anime-nsfw-worker .
+
+# Push to your registry
+docker tag anime-nsfw-worker your-registry/anime-nsfw-worker:latest
+docker push your-registry/anime-nsfw-worker:latest
+```
+
+---
+
+## 📝 API Usage
+
+### Request Parameters
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `prompt` | string | **required** | Your image description (anime tags) |
+| `negative_prompt` | string | (quality defaults) | What to avoid |
+| `width` | int | 832 | Image width |
+| `height` | int | 1216 | Image height |
+| `num_inference_steps` | int | 28 | Generation steps |
+| `guidance_scale` | float | 5.5 | CFG scale (lower for Illustrious) |
+| `seed` | int | random | Reproducibility seed |
+| `scheduler` | string | "Euler a" | Sampling method |
+| `num_images` | int | 1 | Images to generate (1-3) |
+| `add_quality_tags` | bool | true | Add "masterpiece, best quality..." prefix |
+
+### Example Request
+
+```json
+{
+  "input": {
+    "prompt": "1girl, nude, breasts, black hair, large breasts, long hair, blush, looking at viewer, bedroom",
+    "width": 832,
+    "height": 1216,
+    "num_inference_steps": 28,
+    "guidance_scale": 5.5
+  }
+}
+```
+
+### Response
+
+```json
+{
+  "images": ["data:image/png;base64,..."],
+  "image_url": "data:image/png;base64,...",
+  "seed": 123456789,
+  "prompt_used": "masterpiece, best quality, amazing quality, absurdres, highres, 1girl, nude...",
+  "negative_prompt_used": "(low quality, worst quality:1.5), (bad anatomy)..."
+}
+```
+
+---
+
+## 🎨 Recommended Aspect Ratios
+
+| Orientation | Size | Ratio |
+|-------------|------|-------|
+| Portrait | 832x1216 | 2:3 |
+| Landscape | 1216x832 | 3:2 |
+| Square | 1024x1024 | 1:1 |
+
+---
+
+## 💡 Prompting Tips for Anime
+
+Use **Danbooru/anime tags** style:
+- `1girl`, `1boy`, `solo`, `multiple girls`
+- Body: `large breasts`, `small breasts`, `slender`, `thick thighs`
+- Hair: `black hair`, `blonde hair`, `long hair`, `twintails`
+- Eyes: `blue eyes`, `closed eyes`, `looking at viewer`
+- Pose: `standing`, `sitting`, `lying`, `all fours`
+- NSFW: `nude`, `nipples`, `sex`, `vaginal`, `missionary`
+- Style: `blush`, `sweat`, `open mouth`, `tongue out`
+
+---
+
+## 📚 Credits
+
+- Model: [NTR Mix Illustrious XL](https://civitai.com/models/926443) 
+- Base: [Illustrious XL](https://civitai.com/models/795765/illustrious-xl)
+- Guide: [BetterWaifu NSFW Tutorial](https://betterwaifu.com/blog/stable-diffusion-nsfw)

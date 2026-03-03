@@ -1,7 +1,7 @@
 # builder/cache_models.py
 """
 Downloads model files from Yandex.Disk during Docker build.
-Based on NTR Mix Illustrious XL for anime/hentai generation.
+Based on WAI-NSFW-illustrious-SDXL v16 for anime/hentai generation.
 """
 
 import os
@@ -11,22 +11,18 @@ import requests
 # Model paths configuration
 MODEL_BASE_PATH = "/models"
 CHECKPOINT_PATH = os.path.join(MODEL_BASE_PATH, "checkpoints")
-VAE_PATH = os.path.join(MODEL_BASE_PATH, "vae")
 
 # ============================================================================
 # ВСТАВЬТЕ ВАШИ ССЫЛКИ НА ЯНДЕКС.ДИСК СЮДА:
 # ============================================================================
 
 YANDEX_DISK_LINKS = {
-    # Основная модель NTR Mix Illustrious XL v4.0 (~6.5 GB)
+    # WAI-NSFW-illustrious-SDXL v16 (~6.46 GB)
+    # VAE уже встроен в модель, отдельный VAE не нужен!
+    # CivitAI: https://civitai.com/models/827184/wai-illustrious-sdxl
     "checkpoint": {
-        "url": "https://disk.yandex.ru/d/Yy3cdDcNBvknKA",
-        "path": os.path.join(CHECKPOINT_PATH, "ntrMIXIllustriousXL_v40.safetensors"),
-    },
-    # VAE для предотвращения выцветших цветов (~335 MB)
-    "vae": {
-        "url": "https://disk.yandex.ru/d/6L2PaKKIAhlyfQ",
-        "path": os.path.join(VAE_PATH, "sdxl_vae.safetensors"),
+        "url": "ВСТАВЬТЕ_ССЫЛКУ_НА_ЯНДЕКС_ДИСК",
+        "path": os.path.join(CHECKPOINT_PATH, "waiNSFWillustriousSDXL_v160.safetensors"),
     },
 }
 

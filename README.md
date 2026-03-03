@@ -3,15 +3,15 @@
 <h1>Anime/Hentai NSFW Worker</h1>
 
 🚀 | RunPod Serverless worker for high-quality anime/hentai image generation.  
-Based on NTR Mix Illustrious XL v4.0 model.
+Based on WAI-NSFW-illustrious-SDXL v16 model.
 </div>
 
 ## Features
 
-- **NTR Mix Illustrious XL v4.0** - High-quality anime/hentai model
-- **SDXL VAE** - Prevents washed-out colors
-- **Optimized settings** - Euler a scheduler, CFG 5.5, quality tags
-- **Illustrious-based** - Best for anime art style
+- **WAI-NSFW-illustrious-SDXL v16** - Top-rated anime/hentai model with best character knowledge
+- **Built-in VAE** - No separate VAE needed, colors are great out of the box
+- **Optimized settings** - Euler a scheduler, CFG 6.0, enhanced quality tags
+- **Illustrious-based** - Best for anime art style, NSFW poses, and canonical characters
 
 ---
 
@@ -23,13 +23,9 @@ Based on NTR Mix Illustrious XL v4.0 model.
 
 | File | Source | Size |
 |------|--------|------|
-| `ntrMIXIllustriousXL_v40.safetensors` | [CivitAI](https://civitai.com/models/926443?modelVersionId=1061268) | ~6.5 GB |
+| `waiNSFWillustriousSDXL_v160.safetensors` | [CivitAI](https://civitai.com/models/827184/wai-illustrious-sdxl) | ~6.46 GB |
 
-### 2. VAE (models/vae/)
-
-| File | Source | Size |
-|------|--------|------|
-| `sdxl_vae.safetensors` | [HuggingFace](https://huggingface.co/stabilityai/sdxl-vae/blob/main/sdxl_vae.safetensors) | ~335 MB |
+> ✅ **VAE is built into the model** — no separate VAE file needed!
 
 ---
 
@@ -37,10 +33,8 @@ Based on NTR Mix Illustrious XL v4.0 model.
 
 ```
 models/
-├── checkpoints/
-│   └── ntrMIXIllustriousXL_v40.safetensors
-└── vae/
-    └── sdxl_vae.safetensors
+└── checkpoints/
+    └── waiNSFWillustriousSDXL_v160.safetensors
 ```
 
 ---
@@ -69,7 +63,7 @@ docker push your-registry/anime-nsfw-worker:latest
 | `width` | int | 832 | Image width |
 | `height` | int | 1216 | Image height |
 | `num_inference_steps` | int | 28 | Generation steps |
-| `guidance_scale` | float | 5.5 | CFG scale (lower for Illustrious) |
+| `guidance_scale` | float | 6.0 | CFG scale (WAI v16 recommended: 5-7) |
 | `seed` | int | random | Reproducibility seed |
 | `scheduler` | string | "Euler a" | Sampling method |
 | `num_images` | int | 1 | Images to generate (1-3) |
@@ -80,11 +74,11 @@ docker push your-registry/anime-nsfw-worker:latest
 ```json
 {
   "input": {
-    "prompt": "1girl, nude, breasts, black hair, large breasts, long hair, blush, looking at viewer, bedroom",
+    "prompt": "1girl, nude, breasts, black hair, large breasts, long hair, blush, looking at viewer, bedroom, explicit",
     "width": 832,
     "height": 1216,
     "num_inference_steps": 28,
-    "guidance_scale": 5.5
+    "guidance_scale": 6.0
   }
 }
 ```
@@ -96,8 +90,8 @@ docker push your-registry/anime-nsfw-worker:latest
   "images": ["data:image/png;base64,..."],
   "image_url": "data:image/png;base64,...",
   "seed": 123456789,
-  "prompt_used": "masterpiece, best quality, amazing quality, absurdres, highres, 1girl, nude...",
-  "negative_prompt_used": "(low quality, worst quality:1.5), (bad anatomy)..."
+  "prompt_used": "masterpiece, best quality, amazing quality, very aesthetic, absurdres, newest, 1girl, nude...",
+  "negative_prompt_used": "bad quality, worst quality, worst detail, sketch, censor..."
 }
 ```
 
@@ -113,7 +107,7 @@ docker push your-registry/anime-nsfw-worker:latest
 
 ---
 
-## 💡 Prompting Tips for Anime
+## 💡 Prompting Tips for WAI-NSFW
 
 Use **Danbooru/anime tags** style:
 - `1girl`, `1boy`, `solo`, `multiple girls`
@@ -123,11 +117,13 @@ Use **Danbooru/anime tags** style:
 - Pose: `standing`, `sitting`, `lying`, `all fours`
 - NSFW: `nude`, `nipples`, `sex`, `vaginal`, `missionary`
 - Style: `blush`, `sweat`, `open mouth`, `tongue out`
+- **Safety tags**: `general`, `sensitive`, `nsfw`, `explicit` (add `explicit` for NSFW content)
+- **Characters**: WAI v16 knows most anime/game characters — use their name directly
 
 ---
 
 ## 📚 Credits
 
-- Model: [NTR Mix Illustrious XL](https://civitai.com/models/926443) 
+- Model: [WAI-NSFW-illustrious-SDXL v16](https://civitai.com/models/827184/wai-illustrious-sdxl)
 - Base: [Illustrious XL](https://civitai.com/models/795765/illustrious-xl)
 - Guide: [BetterWaifu NSFW Tutorial](https://betterwaifu.com/blog/stable-diffusion-nsfw)

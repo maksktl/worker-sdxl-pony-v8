@@ -1,18 +1,19 @@
 """
 Input schema for the Anime/Hentai NSFW image generation worker.
-Based on NTR Mix Illustrious XL model.
+Based on WAI-NSFW-illustrious-SDXL v16 model.
 """
 
-# Default negative prompt for anime quality (Illustrious-based models)
+# Default negative prompt for WAI-NSFW-illustrious-SDXL v16
 DEFAULT_NEGATIVE_PROMPT = (
-    "(low quality, worst quality:1.5), (bad anatomy), lowres, bad composition, "
-    "fewer digits, text, username, logo, inaccurate eyes, extra digits, "
-    "extra arms, disfigured, missing arms, too many fingers, fused fingers, "
+    "bad quality, worst quality, worst detail, sketch, censor, "
+    "lowres, (bad anatomy:1.2), jpeg artifacts, signature, watermark, "
+    "old, oldest, censored, bar_censor, extra digits, fewer digits, "
+    "extra arms, missing arms, too many fingers, fused fingers, "
     "missing fingers, ugly, blurry"
 )
 
-# Quality tags for Illustrious models (different from Pony!)
-ILLUSTRIOUS_QUALITY_TAGS = "masterpiece, best quality, amazing quality, absurdres, highres"
+# Quality tags for WAI-NSFW-illustrious-SDXL v16
+ILLUSTRIOUS_QUALITY_TAGS = "masterpiece, best quality, amazing quality, very aesthetic, absurdres, newest"
 
 INPUT_SCHEMA = {
     'prompt': {
@@ -52,7 +53,7 @@ INPUT_SCHEMA = {
     'guidance_scale': {
         'type': float,
         'required': False,
-        'default': 5.5  # Lower CFG for Illustrious (5-5.5)
+        'default': 6.0  # WAI v16 recommended: 5-7
     },
     'strength': {
         'type': float,

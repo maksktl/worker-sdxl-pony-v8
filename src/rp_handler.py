@@ -1,13 +1,13 @@
 """
 Anime/Hentai NSFW Image Generation Worker for RunPod Serverless.
-Based on NTR Mix Illustrious XL model.
+Based on WAI-NSFW-illustrious-SDXL v16 model.
 """
 
 import os
 import base64
 
 import torch
-from diffusers import StableDiffusionXLPipeline, AutoencoderKL
+from diffusers import StableDiffusionXLPipeline
 from diffusers.utils import load_image
 
 from diffusers import (
@@ -33,8 +33,7 @@ torch.cuda.empty_cache()
 # --------------------------------- Paths ------------------------------------ #
 
 MODEL_BASE_PATH = "/models"
-CHECKPOINT_PATH = os.path.join(MODEL_BASE_PATH, "checkpoints", "ntrMIXIllustriousXL_v40.safetensors")
-VAE_PATH = os.path.join(MODEL_BASE_PATH, "vae", "sdxl_vae.safetensors")
+CHECKPOINT_PATH = os.path.join(MODEL_BASE_PATH, "checkpoints", "waiNSFWillustriousSDXL_v160.safetensors")
 
 # ------------------------------- Model Handler ------------------------------ #
 
@@ -45,18 +44,12 @@ class ModelHandler:
         self.load_models()
 
     def load_models(self):
-        print("Loading NTR Mix Illustrious XL v4.0 checkpoint...")
-        
-        # Load VAE
-        vae = AutoencoderKL.from_single_file(
-            VAE_PATH,
-            torch_dtype=torch.float16
-        )
+        print("Loading WAI-NSFW-illustrious-SDXL v16 checkpoint...")
         
         # Load main pipeline from local checkpoint
+        # WAI v16 has VAE built-in, no separate VAE needed
         self.pipe = StableDiffusionXLPipeline.from_single_file(
             CHECKPOINT_PATH,
-            vae=vae,
             torch_dtype=torch.float16,
             use_safetensors=True,
             add_watermarker=False
@@ -137,7 +130,7 @@ def build_prompt(base_prompt: str, add_quality_tags: bool) -> str:
 
 @torch.inference_mode()
 def generate_image(job):
-    """Generate an anime/hentai image using NTR Mix Illustrious XL model."""
+    """Generate an anime/hentai image using WAI-NSFW-illustrious-SDXL v16 model."""
     job_input = job["input"]
 
     # Input validation

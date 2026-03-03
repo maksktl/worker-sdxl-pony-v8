@@ -21,7 +21,7 @@ YANDEX_DISK_LINKS = {
     # VAE уже встроен в модель, отдельный VAE не нужен!
     # CivitAI: https://civitai.com/models/827184/wai-illustrious-sdxl
     "checkpoint": {
-        "url": "ВСТАВЬТЕ_ССЫЛКУ_НА_ЯНДЕКС_ДИСК",
+        "url": "https://disk.yandex.ru/d/mzWBc8cTmJPrRg",
         "path": os.path.join(CHECKPOINT_PATH, "waiNSFWillustriousSDXL_v160.safetensors"),
     },
 }

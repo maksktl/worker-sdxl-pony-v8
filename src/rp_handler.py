@@ -56,7 +56,8 @@ class ModelHandler:
         )
         
         self.pipe = self.pipe.to("cuda", silence_dtype_warnings=True)
-        self.pipe.enable_xformers_memory_efficient_attention()
+        # PyTorch 2.10+ native attention is efficient and supports compute capability 12.0
+        # self.pipe.enable_xformers_memory_efficient_attention()
         
         print("Model loaded successfully!")
 

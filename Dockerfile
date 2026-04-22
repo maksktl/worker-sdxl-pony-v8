@@ -1,5 +1,5 @@
-# Base image with CUDA 12.9 for compute capability 12.0 support
-FROM runpod/base:1.0.3-cuda1290-ubuntu2204
+# Base image with CUDA 13.0 for compute capability 12.0 support
+FROM runpod/base:1.0.3-cuda1300-ubuntu2404
 
 ENV HF_HUB_ENABLE_HF_TRANSFER=0
 ENV TRANSFORMERS_CACHE=/models/cache
